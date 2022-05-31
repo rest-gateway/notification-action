@@ -26,8 +26,7 @@ inputs:
   rest_gateway_bot_name:
     description: 'Bot name to be used as author (default: ${secrets.REST_GATEWAY_BOT_NAME})'
     required: false
-    default:
-      - "${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT}"
+    default: ${secrets.REST_GATEWAY_BOT_NAME}
 
 outputs:
   result:
