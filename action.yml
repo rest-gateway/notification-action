@@ -1,0 +1,59 @@
+---
+name: Notification
+description: Sends notification via REST Gateway
+
+inputs:
+  message:
+    description: 'Text message content to be sent'
+    required: true
+    type: string
+
+secrets:
+  recipient:
+    description: 'Notification recipient (default: ${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT})'
+    required: false
+    default: ${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT}
+
+  rest_gateway_url:
+    description: 'REST Gateway URL (default: ${secrets.REST_GATEWAY_API_URL})'
+    required: false
+    default: ${secrets.REST_GATEWAY_API_URL}
+
+  rest_gateway_token:
+    description: 'REST Gateway token (default: ${secrets.REST_GATEWAY_TOKEN})'
+    required: false
+    default: ${secrets.REST_GATEWAY_TOKEN}
+
+  rest_gateway_bot_name:
+    description: 'Bot name to be used as author (default: ${secrets.REST_GATEWAY_BOT_NAME})'
+    required: false
+    default:
+      - "${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT}"
+
+outputs:
+  result:
+    description: "Notification sending result"
+    value: ${{ steps.result.outputs.result }}
+
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Send notification
+      run: >
+        curl
+        -G
+        -H "X-Auth-Token: ${{secrets.rest_gateway_token}}"
+        --data-urlencode "chat_id=${{secrets.recipient}}"
+        --data-urlencode "bot_name=${{secrets.rest_gateway_bot_name}}"
+        --data-urlencode "text=${inputs.message}"
+        "${{ secrets.rest_gateway_url }}"
+
+    - name: Define result
+      id: result
+      run: >
+        RESULT='{"result": "ok"}'
+        echo "::set-output name=result::${RESULT}"
+
+...
