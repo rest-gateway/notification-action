@@ -187,6 +187,26 @@ jobs:
             }'
 
 
+      - name: Update the 'latest' tag
+        if: >
+          needs.validate_new_version.outputs.can_create == 'true' &&
+          needs.validate_new_version.outputs.branch_name == 'master' &&
+          github.event_name == 'push'
+        run: |
+          curl --request POST --url https://api.github.com/repos/${{ github.repository }}/git/tags \
+          -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          -H 'content-type: application/json' \
+          --data '{"tag": "latest",
+            "message": "Pipeline build tag",
+            "object": "${{ github.sha }}",
+            "type": "commit",
+            "tagger": {
+              "name": "Alice from Wonderland",
+              "email": "noreply@localhost.localdomain",
+              "date": "${{steps.timestamp.outputs.timestamp}}"
+            }'
+
+
       - name: Create a Release
         id: create_release
         if: >
@@ -203,8 +223,9 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Use just released action
-        uses: rest-gateway/notification-action@${{env.PLANNED_VERSION}}
+
+      - name: Use latest released action
+        uses: rest-gateway/notification-action@latest
         with:
           message: "Release ${{env.PLANNED_VERSION}} happened for **${APP_NAME}**. Yay."
 ...
