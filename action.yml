@@ -46,8 +46,8 @@ runs:
         -H "X-Auth-Token: ${{inputs.rest_gateway_token}}"
         --data-urlencode "chat_id=${{inputs.recipient}}"
         --data-urlencode "bot_name=${{inputs.rest_gateway_bot_name}}"
-        --data-urlencode "text=${inputs.message}"
-        "${{ inputs.rest_gateway_url }}"
+        --data-urlencode "text=${{inputs.message}}"
+        "${{inputs.rest_gateway_url}}"
 
     - name: Define result
       id: result
