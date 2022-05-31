@@ -1,6 +1,9 @@
 ---
+# yamllint disable rule:line-length
+
 name: Notification
 description: Sends notification via REST Gateway
+
 
 inputs:
   message:
@@ -9,24 +12,29 @@ inputs:
     type: string
 
   recipient:
-    description: 'Notification recipient'
-    required: true
+    description: 'Notification recipient (default: ${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT})'
+    required: false
     type: string
+    default: ${{secrets.NOTIFICATIONS_DEFAULT_RECIPIENT}}
 
   rest_gateway_url:
-    description: 'REST Gateway URL'
-    required: true
+    description: 'REST Gateway URL (default: ${secrets.REST_GATEWAY_API_URL})'
+    required: false
     type: string
+    default: ${{secrets.REST_GATEWAY_API_URL}}
 
   rest_gateway_token:
-    description: 'REST Gateway token'
-    required: true
+    description: 'REST Gateway token (default: ${secrets.REST_GATEWAY_TOKEN})'
+    required: false
     type: string
+    default: ${{secrets.REST_GATEWAY_TOKEN}}
 
   rest_gateway_bot_name:
-    description: 'REST Gateway bot name'
-    required: true
+    description: 'REST Gateway bot name (default: ${secrets.REST_GATEWAY_BOT_NAME})'
+    required: false
     type: string
+    default: ${{secrets.REST_GATEWAY_BOT_NAME}}
+
 
 outputs:
   result:
@@ -47,7 +55,7 @@ runs:
         --data-urlencode "chat_id=${{inputs.recipient}}"
         --data-urlencode "bot_name=${{inputs.rest_gateway_bot_name}}"
         --data-urlencode "text=${{inputs.message}}"
-        "${{inputs.rest_gateway_url}}/send_message"
+        "${{inputs.rest_gateway_url}}"
 
     - name: Define result
       id: result
