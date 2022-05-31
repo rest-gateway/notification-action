@@ -8,7 +8,6 @@ inputs:
     required: true
     type: string
 
-secrets:
   recipient:
     description: 'Notification recipient (default: ${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT})'
     required: false
@@ -41,17 +40,19 @@ runs:
   steps:
 
     - name: Send notification
+      shell: bash
       run: >
         curl
         -G
-        -H "X-Auth-Token: ${{secrets.rest_gateway_token}}"
-        --data-urlencode "chat_id=${{secrets.recipient}}"
-        --data-urlencode "bot_name=${{secrets.rest_gateway_bot_name}}"
+        -H "X-Auth-Token: ${{inputs.rest_gateway_token}}"
+        --data-urlencode "chat_id=${{inputs.recipient}}"
+        --data-urlencode "bot_name=${{inputs.rest_gateway_bot_name}}"
         --data-urlencode "text=${inputs.message}"
-        "${{ secrets.rest_gateway_url }}"
+        "${{ inputs.rest_gateway_url }}"
 
     - name: Define result
       id: result
+      shell: bash
       run: >
         RESULT='{"result": "ok"}'
         echo "::set-output name=result::${RESULT}"
