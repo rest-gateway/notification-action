@@ -12,28 +12,24 @@ inputs:
     type: string
 
   recipient:
-    description: 'Notification recipient (default: ${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT})'
-    required: false
+    description: 'Notification recipient'
+    required: true
     type: string
-    default: ${{secrets.NOTIFICATIONS_DEFAULT_RECIPIENT}}
 
   rest_gateway_url:
-    description: 'REST Gateway URL (default: ${secrets.REST_GATEWAY_API_URL})'
-    required: false
+    description: 'REST Gateway URL'
+    required: true
     type: string
-    default: ${{secrets.REST_GATEWAY_API_URL}}
 
   rest_gateway_token:
-    description: 'REST Gateway token (default: ${secrets.REST_GATEWAY_TOKEN})'
-    required: false
+    description: 'REST Gateway token'
+    required: true
     type: string
-    default: ${{secrets.REST_GATEWAY_TOKEN}}
 
   rest_gateway_bot_name:
-    description: 'REST Gateway bot name (default: ${secrets.REST_GATEWAY_BOT_NAME})'
-    required: false
+    description: 'REST Gateway bot name'
+    required: true
     type: string
-    default: ${{secrets.REST_GATEWAY_BOT_NAME}}
 
 
 outputs:
