@@ -206,5 +206,5 @@ jobs:
       - name: Use just released action
         uses: rest-gateway/notification-action@${{env.PLANNED_VERSION}}
         with:
-          message: "Release ${{env.PLANNED_VERSION}} happened. Yay."
+          message: "Release ${{env.PLANNED_VERSION}} happened for **${APP_NAME}**. Yay."
 ...
