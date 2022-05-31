@@ -47,7 +47,7 @@ runs:
         --data-urlencode "chat_id=${{inputs.recipient}}"
         --data-urlencode "bot_name=${{inputs.rest_gateway_bot_name}}"
         --data-urlencode "text=${{inputs.message}}"
-        "${{inputs.rest_gateway_url}}"
+        "${{inputs.rest_gateway_url}}/send_message"
 
     - name: Define result
       id: result
