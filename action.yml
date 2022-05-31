@@ -10,23 +10,23 @@ inputs:
 
   recipient:
     description: 'Notification recipient (default: ${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT})'
-    required: false
-    default: ${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT}
+    required: true
+    type: string
 
   rest_gateway_url:
     description: 'REST Gateway URL (default: ${secrets.REST_GATEWAY_API_URL})'
-    required: false
-    default: ${secrets.REST_GATEWAY_API_URL}
+    required: true
+    type: string
 
   rest_gateway_token:
     description: 'REST Gateway token (default: ${secrets.REST_GATEWAY_TOKEN})'
-    required: false
-    default: ${secrets.REST_GATEWAY_TOKEN}
+    required: true
+    type: string
 
   rest_gateway_bot_name:
     description: 'Bot name to be used as author (default: ${secrets.REST_GATEWAY_BOT_NAME})'
-    required: false
-    default: ${secrets.REST_GATEWAY_BOT_NAME}
+    required: true
+    type: string
 
 outputs:
   result:

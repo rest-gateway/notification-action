@@ -228,4 +228,8 @@ jobs:
         uses: rest-gateway/notification-action@master
         with:
           message: "Release ${{env.PLANNED_VERSION}} happened for **${{env.APP_NAME}}**. Yay."
+          recipient: "${secrets.NOTIFICATIONS_DEFAULT_RECIPIENT}"
+          rest_gateway_url: "${secrets.REST_GATEWAY_API_URL}"
+          rest_gateway_token: "${secrets.REST_GATEWAY_TOKEN}"
+          rest_gateway_bot_name: "${secrets.REST_GATEWAY_BOT_NAME}"
 ...
