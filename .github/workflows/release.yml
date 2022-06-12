@@ -76,30 +76,23 @@ jobs:
           [[ ! -z "TAG_EXISTS" ]] || exit 2
           [[ ! -z "BRANCH_NAME" ]] || exit 2
 
-
       - name: Generate changelog
         id: generate_changelog
+        uses: reinvented-stuff/changelog-render-action@master
+        with:
+          long_changelog_export_filename: ".long_changelog.md"
+          short_changelog_export_filename: ".short_changelog.md"
+          print_out_changelogs: true
+
+      - name: Generate release message
+        id: generate_release_message
         shell: bash
         run: |
-          described=$(git describe --tags || git rev-list --max-parents=0 HEAD)
-          described_parts=( ${described//-/ } )
-          current_tag=${described_parts[0]}
-
+          release_message_filename=".release_message.md"
           pull_command_example="pull ghcr.io/${{ steps.set_docker_image_id.outputs.github_image_full_name }}"
 
-          changelog_filename=".changelog"
-          release_changelog_filename=".release_changelog"
-          echo "current_tag=${current_tag}"
-
-          echo "Listing current changes..."
-          git log --pretty=oneline --format='%w(1000)* %cd %an <%ae>%n%w(60,0,2)- %s%n' --date="format:%a %b %d %Y" "$current_tag"..HEAD | tee "${changelog_filename}"
-          git log --pretty=oneline --format='%w(200,0,2)- %s (%an <%ae>)' --date="format:%a %b %d %Y" "$current_tag"..HEAD | sort | tee "${release_changelog_filename}"
-
-          echo "Changelog file..."
-          cat .changelog
-
-          echo "Preparing a GitHub Release Changelog"
-          cat << EOF > "${release_changelog_filename}"
+          echo "Preparing a GitHub Release message"
+          cat << EOF > "${release_message_filename}"
           Docker image
           ============
 
@@ -110,11 +103,10 @@ jobs:
           Changelog
           =========
 
-          $(cat "${release_changelog_filename}")
+          $(cat "${{ steps.generate_changelog.outputs.short_changelog_export_filename }}")
           EOF
 
-          echo "::set-output name=changelog_filename::${changelog_filename}"
-          echo "::set-output name=release_changelog_filename::${release_changelog_filename}"
+          echo "::set-output name=release_message_filename::${release_message_filename}"
 
 
       - name: Display changelog
@@ -173,7 +165,7 @@ jobs:
         with:
           tag_name: ${{env.PLANNED_VERSION}}
           release_name: v${{env.PLANNED_VERSION}}
-          body_path: ${{steps.generate_changelog.outputs.release_changelog_filename}}
+          body_path: ${{steps.generate_release_message.outputs.release_message_filename}}
           draft: false
           prerelease: false
 
